@@ -18,17 +18,15 @@
             transition: background 0.5s ease-in-out;
         }
 
-        /* กรอบที่บรรจุปุ่ม */
         .button-container {
             position: relative;
-            margin-top: 30px; /* ระยะห่างจากด้านบน */
+            margin-top: 20px;
             display: flex;
-            justify-content: center; /* จัดปุ่มให้เรียงกันกลาง */
-            gap: 20px; /* ระยะห่างระหว่างปุ่ม */
-            z-index: 10; /* ให้อยู่บนสุด */
+            justify-content: center;
+            gap: 20px;
+            z-index: 10;
         }
 
-        /* ปรับรูปแบบปุ่มให้เป็นวงกลม */
         .button {
             background-color: transparent;
             border: 2px solid lightblue;
@@ -42,7 +40,6 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
-        /* ปรับการแสดงผลเมื่อ hover */
         .button:hover {
             background-color: lightblue;
         }
@@ -51,13 +48,11 @@
             display: none;
         }
 
-        /* ไอคอนสำหรับปุ่ม */
         .icon {
             width: 20px;
             height: 20px;
         }
 
-        /* ช่องวีดีโอ */
         img.channel {
             border-radius: 20px;
             border: 3px solid #87CEFA;
@@ -85,7 +80,7 @@
             align-items: center;
             padding: 10px;
             height: 40px;
-            margin-top: 30px;
+            margin-top: 10px;
             cursor: pointer;
             font-size: 18px;
             color: white;
@@ -102,29 +97,23 @@
 </head>
 <body>
 
-<!-- ข้อความ ALLTV -->
 <p id="alltv">
   <b id="alltvText" style="color: lightblue;">ALLTV</b>
 </p>
 
-<!-- กรอบปุ่มฟังก์ชัน 3 ปุ่ม -->
 <div class="button-container">
-    <!-- ปุ่มปิด/เปิดพื้นหลัง -->
     <button class="button" id="toggleBg">
         <img class="icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9BXCHtvEtdJG8J1ApbEnbIqZ58ICRKhg9bA&usqp=CAU" alt="Toggle Background">
     </button>
-    <!-- ปุ่มเลือกพื้นหลัง -->
     <input type="file" id="bgInput" class="file-input" accept="image/*">
     <button class="button" onclick="document.getElementById('bgInput').click()">
         <img class="icon" src="https://img.icons8.com/ios-filled/50/ffffff/image.png" alt="Select Background">
     </button>
-    <!-- ปุ่มเปลี่ยนสีขอบช่อง -->
-    <button class="button" id="changeBorder" style="margin-right: 10px;">
+    <button class="button" id="changeBorder">
         <img class="icon" src="https://img.lovepik.com/element/40030/4628.png_300.png" alt="Change Border">
     </button>
 </div>
 
-<!-- ช่องวีดีโอ -->
 <a href="intent://cdn-edge-ott.prd.go.th/live_vlc/smil:c30f-97f7-c767-ca64-98aa.smil/chunklist_w1579257356_b2128000.m3u8#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=;scheme=https;type=video/mp4;end">
 <img class="channel" src="https://upload.wikimedia.org/wikipedia/commons/9/9d/NBT_Logo.png" alt="" onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
 <a href="intent://thaipbs-live.cdn.byteark.com/live/playlist.m3u8#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=;scheme=https;type=video/mp4;end">
@@ -465,79 +454,70 @@
 
 
 
-
 <script>
+    let backgroundActive = true;  // ใช้ตัวแปรนี้เพื่อเปิด/ปิดการแสดงพื้นหลัง
+
     document.addEventListener("DOMContentLoaded", function () {
-        const body = document.body;
-        const toggleBgBtn = document.getElementById("toggleBg");
-        const bgInput = document.getElementById("bgInput");
-        const alltv = document.getElementById("alltv");
-        const changeBorderBtn = document.getElementById("changeBorder");
-
-        // ฟังก์ชันสุ่มเปลี่ยนสี
-        function getRandomColor() {
-            const colors = ["#FF5733", "#33FF57", "#3357FF", "#F333FF", "#FFD700", "#40E0D0", "#FF69B4", "#A52A2A", "#00FF7F", "#DC143C",
-                            "#8A2BE2", "#FF4500", "#228B22", "#4169E1", "#C71585"];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        // เปลี่ยนสีขอบของทุกช่อง
-        function changeAllChannelBorders() {
-            const allChannels = document.querySelectorAll(".channel");
-            const randomColor = getRandomColor();
-            allChannels.forEach(function (channel) {
-                channel.style.borderColor = randomColor;
+        let savedBorderColor = localStorage.getItem("channelBorderColor");
+        if (savedBorderColor) {
+            document.querySelectorAll(".channel").forEach(img => {
+                img.style.borderColor = savedBorderColor;
             });
-            localStorage.setItem("channelBorderColor", randomColor);
         }
 
-        // เปลี่ยนสีขอบทุกช่องเมื่อคลิกปุ่ม
-        changeBorderBtn.addEventListener("click", function () {
-            changeAllChannelBorders();
-        });
-
-        // แก้ปัญหาการคลิก ALLTV
-        alltv.addEventListener("click", function (event) {
-            event.stopPropagation(); // ป้องกันการคลิกเข้า `<b>`
-            changeAllChannelBorders();
-        });
-
-        // ฟังก์ชันการเลือกภาพพื้นหลัง
-        let savedBg = localStorage.getItem("backgroundImage");
-        let isBgEnabled = localStorage.getItem("isBgEnabled") !== "false";
-        if (savedBg && isBgEnabled) {
-            body.style.backgroundImage = `url(${savedBg})`;
+        let savedBackground = localStorage.getItem("backgroundImage");
+        if (savedBackground) {
+            document.body.style.backgroundImage = `url(${savedBackground})`;
         }
-
-        bgInput.addEventListener("change", function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    localStorage.setItem("backgroundImage", e.target.result);
-                    body.style.backgroundImage = `url(${e.target.result})`;
-                    localStorage.setItem("isBgEnabled", "true");
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // ปุ่มเปิด/ปิดพื้นหลัง
-        toggleBgBtn.addEventListener("click", function () {
-            isBgEnabled = !isBgEnabled;
-            if (isBgEnabled) {
-                let bg = localStorage.getItem("backgroundImage");
-                if (bg) {
-                    body.style.backgroundImage = `url(${bg})`;
-                }
-                toggleBgBtn.innerHTML = ''; // ลบข้อความ
-            } else {
-                body.style.backgroundImage = "none";
-                toggleBgBtn.innerHTML = ''; // ลบข้อความ
-            }
-            localStorage.setItem("isBgEnabled", isBgEnabled);
-        });
     });
+
+    function changeBorderColor() {
+        let colors = [
+            "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF",
+            "#33FFF5", "#F5FF33", "#FF8C33", "#8C33FF", "#33FF8C",
+            "#FF3366", "#66FF33", "#3366FF", "#FFFF33", "#FF33FF"
+        ];
+        let randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+        document.querySelectorAll(".channel").forEach(img => {
+            img.style.borderColor = randomColor;
+        });
+
+        localStorage.setItem("channelBorderColor", randomColor);  // บันทึกสีขอบ
+    }
+
+    function changeBackground() {
+        let bgInput = document.getElementById("bgInput");
+        if (bgInput.files && bgInput.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                document.body.style.backgroundImage = `url(${e.target.result})`;
+                localStorage.setItem("backgroundImage", e.target.result);  // บันทึกพื้นหลัง
+            };
+            reader.readAsDataURL(bgInput.files[0]);
+        }
+    }
+
+    // ฟังก์ชันเปิด/ปิดพื้นหลัง
+    document.getElementById("toggleBg").addEventListener("click", function () {
+        if (backgroundActive) {
+            // ซ่อนพื้นหลัง (ไม่ให้เลือกรูปใหม่)
+            document.body.style.backgroundImage = "";
+        } else {
+            // ใช้พื้นหลังที่เคยบันทึก
+            let savedBackground = localStorage.getItem("backgroundImage");
+            if (savedBackground) {
+                document.body.style.backgroundImage = `url(${savedBackground})`;
+            }
+        }
+        backgroundActive = !backgroundActive;  // สลับสถานะเปิด/ปิด
+    });
+
+    document.getElementById("alltv").addEventListener("click", changeBorderColor);
+    document.getElementById("changeBorder").addEventListener("click", changeBorderColor);
+
+    // ไม่ให้เปิดการเลือกไฟล์เมื่อกดปุ่ม toggleBg
+    document.getElementById("bgInput").addEventListener("change", changeBackground);
 </script>
 
 </body>
