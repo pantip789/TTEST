@@ -3,118 +3,164 @@
 <head>
     <title>Wiseplay</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=0.1, maximum-scale=10, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
         body {
             background-color: #000;
             color: #fff;
             margin: 0;
-            text-align: center;
             font-family: Arial, sans-serif;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
             background-attachment: fixed;
-            transition: background 0.5s ease-in-out;
+            width: 100vw;
+            height: 100vh;
+            transition: background 0.5s ease;
+            overflow: auto; /* อนุญาตให้เลื่อนหน้าจอ */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
-
-        .button-container {
+        .top-bar-container {
             position: relative;
-            margin-top: 20px;
+            width: 100%;
+            height: 80px;
+            background-color: rgba(173, 216, 230, 0.3);
             display: flex;
             justify-content: center;
-            gap: 20px;
-            z-index: 10;
+            align-items: center;
         }
-
-        .button {
-            background-color: transparent;
-            border: 2px solid lightblue;
-            border-radius: 50%;
+        .circle-btn {
             width: 40px;
             height: 40px;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: lightblue;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        img.channel {
-            border-radius: 20px;
-            border: 3px solid #87CEFA;
-            padding: 2px;
-            margin: 3px;
-            height: 80px;
-            width: 80px;
-            transition: border-color 0.3s ease;
-        }
-
-        .header {
-            position: fixed;
-            top: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            z-index: 10;
-        }
-
-        #alltv {
-            border: 2px solid lightblue;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            height: 40px;
-            margin-top: 10px;
-            cursor: pointer;
-            font-size: 18px;
-            color: white;
             font-weight: bold;
-            border-radius: 5px;
-            background: rgba(0, 0, 0, 0.5);
+            font-size: 16px;
+            cursor: pointer;
+            background-color: lightblue;
+            color: #000;
+            border: 2px solid white;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .circle-btn.left {
+            left: 15px;
+        }
+        .circle-btn.right {
+            right: 15px;
+        }
+        .top-bar {
+            width: 60%;
+            max-width: 400px;
+            height: 50px;
+            background-color: rgba(173, 216, 230, 0.3);
+            border: 2px solid lightblue;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .channel-container {
+            margin-top: -30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .channel {
+            border-radius: 20px;
+            border: 2px solid lightblue;
+            padding: 5px;
+            margin: 10px;
+            height: 70px;
+            width: 70px;
             transition: border-color 0.3s ease;
         }
-
-        #alltv:hover {
-            border-color: #ff5733;
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: white;
+            text-align: center;
+            opacity: 0.7;
         }
     </style>
+    <script>
+        window.onload = function () {
+            const savedBackground = localStorage.getItem('backgroundImage');
+            if (savedBackground) {
+                document.body.style.backgroundImage = `url('${savedBackground}')`;
+            }
+
+            const savedBorderColor = localStorage.getItem('borderColor');
+            if (savedBorderColor) {
+                const channels = document.querySelectorAll('.channel');
+                channels.forEach((channel) => {
+                    channel.style.borderColor = savedBorderColor;
+                });
+            }
+        };
+
+        function openFileDialog() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const imageData = e.target.result;
+                        document.body.style.backgroundImage = `url('${imageData}')`;
+                        localStorage.setItem('backgroundImage', imageData);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            fileInput.click();
+        }
+
+        function resetBackground() {
+            document.body.style.backgroundImage = 'none';
+            document.body.style.backgroundColor = '#000';
+            localStorage.removeItem('backgroundImage');
+        }
+
+        function changeBorderColors() {
+            const colors = ['red', 'green', 'yellow', 'purple', 'orange', 'pink', 'cyan', 'blue', 'lime', 'magenta'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            const channels = document.querySelectorAll('.channel');
+            channels.forEach((channel) => {
+                channel.style.borderColor = randomColor;
+            });
+
+            localStorage.setItem('borderColor', randomColor);
+        }
+    </script>
 </head>
 <body>
 
-<p id="alltv">
-  <b id="alltvText" style="color: lightblue;">ALLTV</b>
-</p>
-
-<div class="button-container">
-    <button class="button" id="toggleBg">
-        <img class="icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9BXCHtvEtdJG8J1ApbEnbIqZ58ICRKhg9bA&usqp=CAU" alt="Toggle Background">
-    </button>
-    <input type="file" id="bgInput" class="file-input" accept="image/*">
-    <button class="button" onclick="document.getElementById('bgInput').click()">
-        <img class="icon" src="https://img.icons8.com/ios-filled/50/ffffff/image.png" alt="Select Background">
-    </button>
-    <button class="button" id="changeBorder">
-        <img class="icon" src="https://img.lovepik.com/element/40030/4628.png_300.png" alt="Change Border">
-    </button>
+<div class="top-bar-container">
+    <button class="circle-btn left" onclick="openFileDialog()">W</button>
+    <div class="top-bar" onclick="changeBorderColors()">ALLTV</div>
+    <button class="circle-btn right" onclick="resetBackground()">R</button>
 </div>
 
-<a href="intent://cdn-edge-ott.prd.go.th/live_vlc/smil:c30f-97f7-c767-ca64-98aa.smil/chunklist_w1579257356_b2128000.m3u8#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=;scheme=https;type=video/mp4;end">
+<div class="channel-container">
+    <a href="intent://cdn-edge-ott.prd.go.th/live_vlc/smil:c30f-97f7-c767-ca64-98aa.smil/chunklist_w1579257356_b2128000.m3u8#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=;scheme=https;type=video/mp4;end">
 <img class="channel" src="https://upload.wikimedia.org/wikipedia/commons/9/9d/NBT_Logo.png" alt="" onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
 <a href="intent://thaipbs-live.cdn.byteark.com/live/playlist.m3u8#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=;scheme=https;type=video/mp4;end">
 <img class="channel" src="https://ais-s.ais-vidnt.com/ais/play/origin/LIVE//channelicon/0014.png" alt="" onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
@@ -328,11 +374,6 @@
 <img class="channel" src="https://www.dropbox.com/scl/fi/xo57pzrsw14fd9wf2e3pc/trueballthai-9.png?rlkey=uvbrbfkor4mqkfv1atbohsfex&dl=1"alt="onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
 -->
 
-    <a href="intent://45.144.165.223/tvhung677uvd33567uvde3zfu8kk9iy44rtgd4t%20-%20%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%99%E0%B8%B2/etjetjthecaaxwwfcGytcwvcsszcrwxni7e1/444vhbijnibtcezqzxfvjmkpmhgrcrr/5t55ttgggmmcssdrgyjjunollpkinhgsawad4f/ddde4jgk5icixkzwkKqkxei2isoqooxovtooqo21ocxxxx45yckkxkwertyui6kccvvgfkdiwk2kskxktoxlzz9993(55)$$@99.m3u8#Intent;package=com.mxtech.videoplayer.ad;S.userAgent=exo_player;S.title=Live%20Program;S.referer=http://45.144.165.223;scheme=http;type=video/mp4;end">
-
-<img class="channel" src="https://i.postimg.cc/yWqNWZf5/Mr-Bean.png" alt="" onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
-
-
 
 
 
@@ -454,79 +495,12 @@
 <img class="channel" src="https://cms.dmpcdn.com/livetv/2024/04/10/5ecb9e30-f724-11ee-a17f-0795ff88f566_webp_original.webp"alt="onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
 <a href="intent://dookeela.live/live-tv/foodnetwork#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=https:playInNatPlayer/;scheme=https;type=video/mp4;end">
 <img class="channel" src="https://ais-s.ais-vidnt.com/ais/play/origin/LIVE//channelicon/0162.png"alt="onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
+
 <a href="intent://dookeela.live/live-tv/afn#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=;scheme=https;type=video/mp4;end">
 <img class="channel" src="https://ais-s.ais-vidnt.com/ais/play/origin/LIVE//channelicon//R3_0161.png" alt="" onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
-<a href="intent://45.144.165.223/tvhung677uvd33567uvde3zfu8kk9iy44rtgd4t%20-%20%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%99%E0%B8%B2/etjetjthecaaxwwfcGytcwvcsszcrwxni7e1/444vhbijnibtcezqzxfvjmkpmhgrcrr/5t55ttgggmmcssdrgyjjunollpkinhgsawad4f/ddde4jgk5icixkzwkKqkxei2isoqooxovtooqo21ocxxxx45yckkxkwertyui6kccvvgfkdiwk2kskxktoxlzz9993(55)$$@99.m3u8#Intent;package=com.mxtech.videoplayer.ad;S.userAgent=exo_player;S.title=Live%20Program;S.referer=http://45.144.165.223;scheme=http;type=video/mp4;end">
-
-<img class="channel" src="https://i.postimg.cc/yWqNWZf5/Mr-Bean.png" alt="" onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';"></a>
+</div>
 
 
-
-<script>
-    let backgroundActive = true;  // ใช้ตัวแปรนี้เพื่อเปิด/ปิดการแสดงพื้นหลัง
-
-    document.addEventListener("DOMContentLoaded", function () {
-        let savedBorderColor = localStorage.getItem("channelBorderColor");
-        if (savedBorderColor) {
-            document.querySelectorAll(".channel").forEach(img => {
-                img.style.borderColor = savedBorderColor;
-            });
-        }
-
-        let savedBackground = localStorage.getItem("backgroundImage");
-        if (savedBackground) {
-            document.body.style.backgroundImage = `url(${savedBackground})`;
-        }
-    });
-
-    function changeBorderColor() {
-        let colors = [
-            "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF",
-            "#33FFF5", "#F5FF33", "#FF8C33", "#8C33FF", "#33FF8C",
-            "#FF3366", "#66FF33", "#3366FF", "#FFFF33", "#FF33FF"
-        ];
-        let randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-        document.querySelectorAll(".channel").forEach(img => {
-            img.style.borderColor = randomColor;
-        });
-
-        localStorage.setItem("channelBorderColor", randomColor);  // บันทึกสีขอบ
-    }
-
-    function changeBackground() {
-        let bgInput = document.getElementById("bgInput");
-        if (bgInput.files && bgInput.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                document.body.style.backgroundImage = `url(${e.target.result})`;
-                localStorage.setItem("backgroundImage", e.target.result);  // บันทึกพื้นหลัง
-            };
-            reader.readAsDataURL(bgInput.files[0]);
-        }
-    }
-
-    // ฟังก์ชันเปิด/ปิดพื้นหลัง
-    document.getElementById("toggleBg").addEventListener("click", function () {
-        if (backgroundActive) {
-            // ซ่อนพื้นหลัง (ไม่ให้เลือกรูปใหม่)
-            document.body.style.backgroundImage = "";
-        } else {
-            // ใช้พื้นหลังที่เคยบันทึก
-            let savedBackground = localStorage.getItem("backgroundImage");
-            if (savedBackground) {
-                document.body.style.backgroundImage = `url(${savedBackground})`;
-            }
-        }
-        backgroundActive = !backgroundActive;  // สลับสถานะเปิด/ปิด
-    });
-
-    document.getElementById("alltv").addEventListener("click", changeBorderColor);
-    document.getElementById("changeBorder").addEventListener("click", changeBorderColor);
-
-    // ไม่ให้เปิดการเลือกไฟล์เมื่อกดปุ่ม toggleBg
-    document.getElementById("bgInput").addEventListener("change", changeBackground);
-</script>
 
 </body>
 </html>
