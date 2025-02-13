@@ -1,76 +1,130 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 body {
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #222;
-    margin: 0;
-}
-
-.calculator {
-    width: 250px;
-    padding: 15px;
-    background: #333;
-    border-radius: 12px;
-    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.4);
-    text-align: center;
-}
-
-.display {
-    width: 100%;
-    height: 50px;
-    background: #000;
-    color: #0f0;
-    font-size: 20px;
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
+    background: radial-gradient(circle at center, #0f172a 10%, #1e293b 40%, #111827 90%);
     font-family: 'Orbitron', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-    box-shadow: inset 0px 0px 5px rgba(0, 255, 0, 0.4);
+    margin: 0;
+    color: white;
 }
 
+/* ปรับให้เครื่องคิดเลขขยายขนาดอัตโนมัติตามหน้าจอ */
+.calculator {
+    background: linear-gradient(145deg, #2a2d3a, #1f2230);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5), inset 5px 5px 10px rgba(255, 255, 255, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    border: 3px solid #00ff00; /* ขอบสีเขียว */
+    position: relative;
+}
+
+/* หน้าจอแสดงผล */
+.display {
+    background: black; /* พื้นหลังจอเป็นสีดำ */
+    color: #00bfff; /* ตัวเลขและข้อความเป็นสีฟ้าสะท้อนแสง */
+    font-size: 2.5rem;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: right;
+    margin-bottom: 15px;
+    font-weight: bold;
+    box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff; /* เพิ่มแสงเรือง */
+    border: 2px solid #00ff00; /* ขอบจอเป็นสีเขียว */
+}
+
+/* ข้อความป้อนรหัสผ่าน */
+#message {
+    color: #00bfff; /* สีฟ้าสะท้อนแสง */
+    font-size: 1.2rem;
+    margin-top: 10px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff;
+}
+
+/* ปรับปุ่มให้ขยายตามหน้าจอ */
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
+    gap: 12px;
 }
 
+/* สไตล์ปุ่ม */
 button {
-    width: 100%;
-    height: 40px;
-    font-size: 18px;
-    background: #444;
+    background: linear-gradient(145deg, #3c4252, #2b2f3d);
     color: white;
+    font-size: 1.6rem;
+    padding: 18px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     transition: 0.2s;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4), inset -2px -2px 5px rgba(255, 255, 255, 0.1);
 }
 
 button:hover {
-    background: #666;
+    background: linear-gradient(145deg, #4c5263, #343947);
+    transform: translateY(-2px);
 }
 
 button:active {
-    background: #888;
-    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.3);
+    transform: scale(0.95);
 }
 
-.zero {
+button.zero {
     grid-column: span 2;
 }
 
-#message {
-    color: red;
-    margin-top: 5px;
-    font-size: 14px;
+/* ปุ่มพิเศษ */
+button:nth-child(4) { /* ปุ่ม C */
+    background: linear-gradient(145deg, #ff6b6b, #d63e3e);
+    color: #fff;
+}
+
+button:nth-child(4):hover {
+    background: linear-gradient(145deg, #ff5252, #c23333);
+}
+
+button:nth-child(8) { /* ปุ่ม ⌫ */
+    background: linear-gradient(145deg, #ffcc29, #ffb700);
+    color: #111;
+}
+
+button:nth-child(8):hover {
+    background: linear-gradient(145deg, #ffb700, #e09e00);
+}
+
+button:nth-child(12) { /* ปุ่ม 🔑 */
+    background: linear-gradient(145deg, #00e676, #00c853);
+    color: #fff;
+}
+
+button:nth-child(12):hover {
+    background: linear-gradient(145deg, #00d76b, #00b845);
+}
+
+/* ปรับให้แสดงผลสมส่วนอัตโนมัติเมื่อหมุนจอ */
+@media screen and (max-width: 480px) {
+    .calculator {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .display {
+        font-size: 2rem;
+        padding: 15px;
+    }
+
+    button {
+        font-size: 1.4rem;
+        padding: 14px;
+    }
 }
 
