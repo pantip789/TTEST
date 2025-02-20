@@ -13,7 +13,7 @@
 
         // ฟังก์ชันเล่นวิดีโอผ่าน JW Player
         function playVideoWithJWPlayer(url) {
-            if (currentPlayer) {
+            if (currentPlayer === 'JWPlayer') {
                 jwplayer("player").stop(); // หยุดวิดีโอที่เล่นอยู่ก่อนหน้า
             }
 
@@ -38,7 +38,7 @@
 
         // ฟังก์ชันเปิดวิดีโอผ่าน Wiseplay
         function playVideoWithWiseplay(url) {
-            if (currentPlayer) {
+            if (currentPlayer === 'JWPlayer') {
                 jwplayer("player").stop(); // หยุดวิดีโอที่เล่นอยู่ก่อนหน้า
                 const playerContainer = document.getElementById('player-container');
                 playerContainer.style.display = 'none'; // ซ่อนตัวเล่น JW Player
