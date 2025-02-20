@@ -1,75 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Video Player</title>
+    <title>Play M3U8 via Chromecast</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.1, maximum-scale=10, user-scalable=yes">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
-    <script>
-        jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
-
-        let currentPlayer = null; // ตัวแปรเก็บสถานะของผู้เล่นปัจจุบัน
-
-        // ฟังก์ชันเล่นวิดีโอผ่าน JW Player
-        function playVideoWithJWPlayer(url) {
-            if (currentPlayer === 'JWPlayer') {
-                jwplayer("player").stop(); // หยุดวิดีโอที่เล่นอยู่ก่อนหน้า
-            }
-
-            const playerContainer = document.getElementById('player-container');
-            playerContainer.style.display = 'block'; // แสดงตัวเล่นวิดีโอ
-
-            jwplayer("player").setup({
-                file: url,
-                type: "hls", // ใช้ HLS Streaming
-                width: "100%",
-                aspectratio: "16:9",
-                autostart: true
-            });
-
-            // เปิดโหมดเต็มจออัตโนมัติ
-            setTimeout(() => {
-                jwplayer("player").setFullscreen(true);
-            }, 500);
-
-            currentPlayer = 'JWPlayer'; // ตั้งค่าสถานะผู้เล่นปัจจุบัน
-        }
-
-        // ฟังก์ชันเปิดวิดีโอผ่าน Wiseplay
-        function playVideoWithWiseplay(url) {
-            if (currentPlayer === 'JWPlayer') {
-                jwplayer("player").stop(); // หยุดวิดีโอที่เล่นอยู่ก่อนหน้า
-                const playerContainer = document.getElementById('player-container');
-                playerContainer.style.display = 'none'; // ซ่อนตัวเล่น JW Player
-            }
-
-            const intentUrl = `intent://${url}#Intent;package=com.wiseplay;S.userAgent=exo_player;S.title=Live%20Program;S.referer=;scheme=https;type=video/mp4;end`;
-            window.location.href = intentUrl; // เปิดผ่าน Wiseplay
-
-            currentPlayer = 'Wiseplay'; // ตั้งค่าสถานะผู้เล่นปัจจุบัน
-        }
-
-        window.onload = function () {
-            // ซ่อนอิลิเมนต์ที่มีการใช้ ID หรือ Class ที่เกี่ยวข้องกับโฆษณา
-            var adElements = document.querySelectorAll('[id*="ad"], [class*="ad"], [src*="ads"]');
-            adElements.forEach(function(element) {
-                element.style.display = 'none';
-            });
-        }
-
-        // ฟังก์ชันปิด JW Player เมื่อลงจากหน้า
-        window.onbeforeunload = function() {
-            if (currentPlayer === 'JWPlayer') {
-                jwplayer("player").stop(); // หยุด JW Player
-            }
-        };
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             background-color: #000;
             color: #fff;
-            margin: 0;
             text-align: center;
             font-family: Arial, sans-serif;
         }
@@ -77,58 +15,28 @@
             border-radius: 20px;
             border: 1px solid #87CEFA;
             padding: 2px;
-            margin: 3px;
+            margin: 20px;
             height: 80px;
             width: 80px;
-        }
-        .popup, .overlay, [style*="position: fixed"], [style*="position: absolute"] {
-            display: none !important;
-        }
-        #player-container {
-            display: none; /* ซ่อนตัวเล่นวิดีโอก่อน */
-            width: 100%;
-            max-width: 700px;
-            margin: auto;
-            background-color: #111;
-            padding: 10px;
-            border-radius: 10px;
-            position: relative;
-        }
-        #player {
-            width: 100%;
-        }
-        p {
-            border: 2px solid lightblue;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 5px;
-            height: 30px;
-        }
-        b {
-            color: lightblue;
+            cursor: pointer; /* เพิ่มเคอร์เซอร์เพื่อบ่งบอกว่าสามารถคลิกได้ */
         }
     </style>
 </head>
 <body>
 
-<p><b>ALLTV</b></p>
+<h1 style="color: lightblue;">Click the Image to Play Video</h1>
 
-<div id="player-container">
-    <div id="player"></div>
-</div>
+<!-- รูปภาพสำหรับกดเพื่อเล่นวิดีโอ -->
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/NBT_Logo.png" alt="Play Video" 
+     onclick="playVideo('https://3abn.bozztv.com/3abn2/Kids_live/smil:Kids_live.smil/playlist.m3u8')"
+     onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';">
 
-<!-- ช่องวีดีโอเล่นผ่าน JW Player -->
-<a href="javascript:void(0);" onclick="playVideoWithJWPlayer('https://cdn-edge-ott.prd.go.th/live_vlc/smil:c30f-97f7-c767-ca64-98aa.smil/chunklist_w1579257356_b2128000.m3u8')">
-    <img class="channel" src="https://upload.wikimedia.org/wikipedia/commons/9/9d/NBT_Logo.png" alt="" 
-         onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';">
-</a>
-
-<!-- ช่องวีดีโอเล่นผ่าน Wiseplay -->
-<a href="javascript:void(0);" onclick="playVideoWithWiseplay('cdn-edge-ott.prd.go.th/live_vlc/smil:c30f-97f7-c767-ca64-98aa.smil/chunklist_w1579257356_b2128000.m3u8')">
-    <img class="channel" src="https://upload.wikimedia.org/wikipedia/commons/9/9d/NBT_Logo.png" alt="" 
-         onerror="this.onerror=null; this.src='https://as2.ftcdn.net/jpg/03/53/54/91/1000_F_353549130_ahtWCQjjJzhzP8ocg1qR3s2E3Cz1VR3w.jpg';">
-</a>
+<script>
+    function playVideo(url) {
+        // เปิดลิงก์ M3U8 ในเบราว์เซอร์
+        window.open(url, '_blank');
+    }
+</script>
 
 </body>
 </html>
