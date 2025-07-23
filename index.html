@@ -2,37 +2,25 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>ดาวน์โหลดแอป</title>
+  <title>เปิดลิงก์ด้วยเบราว์เซอร์</title>
+  <script>
+    function openInBrowser() {
+      // เปลี่ยน URL ตรงนี้ให้เป็นลิงก์ APK หรือเว็บที่คุณต้องการให้เปิด
+      var apkUrl = "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID";
+
+      // ใช้ Intent URL scheme เพื่อบังคับให้เปิดผ่านเบราว์เซอร์
+      window.location.href = "intent://" + apkUrl.replace(/^https?:\/\//, "") +
+                             "#Intent;scheme=https;package=com.android.browser;end";
+    }
+  </script>
 </head>
-<body style="text-align: center; font-family: sans-serif; margin-top: 50px;">
-  <h2>กดปุ่มด้านล่างเพื่อดาวน์โหลดแอป</h2>
+<body style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+  <h2>กดปุ่มเพื่อเปิดด้วยเบราว์เซอร์</h2>
 
-  <a href="https://drive.google.com/file/d/1HenqFwMhpE7j25zqZatCU_gGs5KEGh4x/view?usp=drivesdk" download>
-    <img src="https://cdn-icons-png.flaticon.com/512/724/724933.png"
-         alt="Download APK"
-         width="150"
-         style="cursor: pointer;">
-  </a>
+  <button onclick="openInBrowser()" style="font-size: 20px; padding: 15px 30px;">
+    เปิดลิงก์ในเบราว์เซอร์
+  </button>
 
-  <p>ขนาดไฟล์ประมาณ 20MB</p>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <title>ดาวน์โหลดแอป</title>
-</head>
-<body style="text-align: center; font-family: sans-serif; margin-top: 50px;">
-  <h2>กดปุ่มด้านล่างเพื่อดาวน์โหลดแอป</h2>
-
-  <a href="https://example.com/your_app.apk" download>
-    <img src="https://cdn-icons-png.flaticon.com/512/724/724933.png"
-         alt="Download APK"
-         width="150"
-         style="cursor: pointer;">
-  </a>
-
-  <p>ขนาดไฟล์ประมาณ 20MB</p>
+  <p style="margin-top: 20px;">ใช้สำหรับกล่อง Android ที่ดาวน์โหลดไม่ได้โดยตรง</p>
 </body>
 </html>
